@@ -1,4 +1,4 @@
-# State Maschine Database for Distributed Systems
+# State Machine Database for Distributed Systems
 
 Distributed systems consist of multiple logical stages running on multiple machines.
 Data is split into entities whose state is modified while flowing through the system.
@@ -131,15 +131,6 @@ The entities are query with a `GET` request on `/<namespace>/<component>/query`:
 The query operation reads consistently from the database in the context of parallel state updates.
 
 
-### Requirements
-
-The following non-functional requirements shall be included in the database design:
-
-- 1mio entities shall be (bulk-)created in below 1min
-- state updates shall be performed in parallel from multiple thousand compute instances
-- entity queries in a component of 100mio entities shall complete in below 10secs
-
-
 ## CLI
 
 The `statedb` executable is the central UI to interact with the database.
@@ -176,3 +167,12 @@ statedb> create entities <entities_file>
 statedb> update entities <entities_file>
 statedb> query entities <query_file>
 ```
+
+
+## Requirements
+
+The following non-functional requirements shall be included in the database design:
+
+- 1mio entities shall be (bulk-)created in below 1min
+- state updates shall be performed in parallel from multiple thousand compute instances
+- entity queries in a component of 100mio entities shall complete in below 10secs
