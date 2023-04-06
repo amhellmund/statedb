@@ -24,7 +24,7 @@ This section summarizes the API to interact with the `StateDB`.
 
 ### Namespace Creation
 
-The namespace is created with a POST request on `/namespace`:
+The namespace is created with a `POST` request on `/namespace`:
 
 ```json
 {
@@ -35,7 +35,7 @@ The namespace is created with a POST request on `/namespace`:
 
 ### Component Creation
 
-The component is created with a POST request on `/<namespace>/component`:
+The component is created with a `POST` request on `/<namespace>/component`:
 
 ```json
 {
@@ -67,7 +67,7 @@ The component is created with a POST request on `/<namespace>/component`:
 
 ### Entity Creation
 
-The entities are created with a POST request on `/<namespace>/<component>`:
+The entities are created with a `POST` request on `/<namespace>/<component>`:
 
 ```json
 {[
@@ -88,7 +88,7 @@ The entities are created with a POST request on `/<namespace>/<component>`:
 
 ### Entity State Update
 
-The entity state is updated with a POST request on `/<namespace>/<component>/entities`:
+The state of one or multiple entities is updated with a `POST` request on `/<namespace>/<component>/entities`:
 
 ```json
 {[
@@ -102,6 +102,39 @@ The entity state is updated with a POST request on `/<namespace>/<component>/ent
         "from_state": "created",
         "to_state": "in-processing",
         "compute_instance": "<instance-id>" 
+    },
+    {
+        "entity_id": "<correlation_id2>",
+        "from_state": "in-processing",
+        "to_state": "completed",
+        "compute_instance": "<instance-id>"
     }
 ]}
 ```
+
+All state updates in one API call are performed in transactional mode such that all updates succeed or none.
+
+
+### Entity Query
+
+The entities are query with a `GET` request on `/<namespace>/<component>/query`:
+
+```json
+{
+    "entity_id": "<glob_expression>",
+    "state": "<state1>|<state2>|...|<stateN>",
+    "metadata": "latitude > 0.4 and longitude > 10.0 and location == 'location'",
+    "aggregation": "count()"
+}
+```
+
+The query operation reads consistently from the database in the context of parallel state updates.
+
+
+### Requirements
+
+The following non-functional requirements shall be included in the database design:
+
+- 1mio entities shall be (bulk-)created in below 1min
+- state updates shall be performed in parallel from multiple thousand compute instances
+- entity queries in a component of 100mio entities shall complete in below 10secs
