@@ -138,3 +138,41 @@ The following non-functional requirements shall be included in the database desi
 - 1mio entities shall be (bulk-)created in below 1min
 - state updates shall be performed in parallel from multiple thousand compute instances
 - entity queries in a component of 100mio entities shall complete in below 10secs
+
+
+## CLI
+
+The `statedb` executable is the central UI to interact with the database.
+
+
+### Creation of Database
+
+A new database is created with:
+
+```console
+statedb create --working-dir <working_dir> --config <config_file>
+```
+
+
+### Launch of Database Service
+
+The database service is launched with:
+
+```console
+statedb launch --working-dir <working_dir> --port <database_port>
+```
+
+
+### Interaction with Database
+
+The database console may be launched with:
+
+```console
+statedb console --port <database_port> --user <user> --password <password>
+
+statedb> create namespace <namespace_file>
+statedb> create component <component_file>
+statedb> create entities <entities_file>
+statedb> update entities <entities_file>
+statedb> query entities <query_file>
+```
